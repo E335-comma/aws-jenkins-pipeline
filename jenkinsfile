@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Git Checkout'){
             steps {
-                git branch: 'main', url:'https://github.com/E335-comma/IaC-Pipeline.git'
+                git branch: 'main', url:'https://github.com/E335-comma/aws-jenkins-pipeline'
             }
         }
 
