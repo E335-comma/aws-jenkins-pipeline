@@ -66,24 +66,22 @@ pipeline {
                     ).trim()
         
                     sh '''
+                    KEY_FILE=$(mktemp)
+                    echo "Using key file $KEY_FILE"
+
                     cd terraform-config
-                    terraform output -raw private_key > /tmp/key.pem
-                    chmod 400 /tmp/key.pem
-                    '''
-        
-        
-                    sh '''
-                      echo "Using EC2 IP: $EC2_PUBLIC_IP"
-                      scp -o StrictHostKeyChecking=no -i /tmp/key.pem docker.sh ec2-user@$EC2_PUBLIC_IP:~/
-                    '''
-        
-                    sh """
-                      ssh -o StrictHostKeyChecking=no -i /tmp/key.pem ec2-user@$EC2_PUBLIC_IP \
+                    terraform output -raw private_key > "$KEY_FILE"
+                    chmod 400 "$KEY_FILE"
+
+                    echo "Using EC2 IP: $EC2_PUBLIC_IP"
+                    scp -o StrictHostKeyChecking=no -i "$KEY_FILE" docker.sh ec2-user@$EC2_PUBLIC_IP:~/
+
+                    ssh -o StrictHostKeyChecking=no -i "$KEY_FILE" ec2-user@$EC2_PUBLIC_IP \
                       'chmod +x docker.sh && ./docker.sh'
-                    """
-        
-                    echo "Connected to EC2 Instance at IP: ${env.EC2_PUBLIC_IP}"
-                    echo "App Running on http://${env.EC2_PUBLIC_IP}:3000"
+
+                    rm -f "$KEY_FILE"
+                   '''
+
                 }
             }
         }
