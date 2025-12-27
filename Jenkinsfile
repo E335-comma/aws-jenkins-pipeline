@@ -74,11 +74,8 @@ pipeline {
                     chmod 400 "$KEY_FILE"
 
                     echo "Using EC2 IP: $EC2_PUBLIC_IP"
-<<<<<<< HEAD
-                    scp -o StrictHostKeyChecking=no -i "$KEY_FILE" docker.sh ec2-user@$EC2_PUBLIC_IP:~/
-=======
+
                     scp -o StrictHostKeyChecking=no -i "$KEY_FILE" ../docker.sh ec2-user@$EC2_PUBLIC_IP:~/
->>>>>>> 6554ff0 (fix)
 
                     ssh -o StrictHostKeyChecking=no -i "$KEY_FILE" ec2-user@$EC2_PUBLIC_IP \
                       'chmod +x docker.sh && ./docker.sh'
