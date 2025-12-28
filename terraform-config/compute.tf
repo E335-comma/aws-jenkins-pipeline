@@ -11,7 +11,7 @@ resource "aws_key_pair" "adeife_key" {
 resource "aws_instance" "web" {
   ami           = var.web_instance_ami
   instance_type = "t3.micro"
-  key_name      = "adeife-key"
+  key_name      = aws_key_pair.adeife_key.key_name
   subnet_id     = aws_subnet.public_subnet.id
   security_groups = [aws_security_group.ec2_sg.id]
 
