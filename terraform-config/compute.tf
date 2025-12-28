@@ -13,7 +13,7 @@ resource "aws_instance" "web" {
   instance_type = "t3.micro"
   key_name      = "adeife-key"
   subnet_id     = aws_subnet.public_subnet.id
-  vpc_security_group_ids = aws_security_group.ec2_sg.id
+  security_groups = [aws_security_group.ec2_sg.id]
 
   tags = {
     Name = "adeife-server"
